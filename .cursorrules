@@ -1,0 +1,2 @@
+Always respond in Türkçe
+Swift projemden firebase ilgili tüm kodları kaldırıp yerine geçici değişkenlerle adımlar ekle. Örneğin giriş için telefon girişi yerine geçici bir değişken koy o değişkenle uyuşuyorsa o şekilde giriş yapayım. Yani tamamen firebase'den koparıp internet bağlantısı olamdan demo verilerle giriş ve gerekli diğer tüm işlemleri yapabileceğim hale getir.
