@@ -10,7 +10,6 @@ import SwiftUI
 struct AdminView: View {
     @EnvironmentObject var appViewModel: AppViewModel
     @StateObject private var groupViewModel = GroupViewModel()
-    @State private var selectedGroup: Group?
     @State private var showingCreateGroupSheet = false
     
     var body: some View {
@@ -32,7 +31,7 @@ struct AdminView: View {
                             VStack(alignment: .leading) {
                                 Text(group.name)
                                     .font(.headline)
-                                Text("\(group.description ?? "")")
+                                Text(group.description)
                                     .font(.caption)
                                     .foregroundStyle(.gray)
                             }
@@ -67,7 +66,7 @@ struct AdminView: View {
     }
 }
 
-// Preview
+// Preview Provider
 struct AdminView_Previews: PreviewProvider {
     static var previews: some View {
         AdminView()

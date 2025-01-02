@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import FirebaseFirestore
-import FirebaseAuth
 
 // Kullanıcı rolleri için enum
 enum UserRole: String, Codable {
@@ -25,37 +23,16 @@ enum UserStatus: String, Codable {
 
 // Kullanıcı modeli
 struct User: Identifiable, Codable {
-    // Firebase ID - DocumentID wrapper'ı yerine normal String
     var id: String?
-    
-    // Temel bilgiler
     let phoneNumber: String
     var firstName: String?
     var lastName: String?
     var email: String?
-    
-    // Sistem bilgileri
     var role: UserRole = .user
     var isVerified: Bool = false
     var status: UserStatus = .active
-    
-    // Zaman damgaları
     let createdAt: Date
     var updatedAt: Date
-    
-    // Özel kodlama anahtarları
-    enum CodingKeys: String, CodingKey {
-        case id
-        case phoneNumber
-        case firstName
-        case lastName
-        case email
-        case role
-        case isVerified
-        case status
-        case createdAt
-        case updatedAt
-    }
     
     // Decoder için init
     init(from decoder: Decoder) throws {
@@ -93,48 +70,5 @@ struct User: Identifiable, Codable {
         self.status = status
         self.createdAt = createdAt
         self.updatedAt = updatedAt
-    }
-    
-    // Firebase'den veri oluşturma
-    static func fromFirebaseUser(_ firebaseUser: FirebaseAuth.User) -> User {
-        return User(
-            id: firebaseUser.uid, // Explicit ID assignment
-            phoneNumber: firebaseUser.phoneNumber ?? "",
-            createdAt: firebaseUser.metadata.creationDate ?? Date(),
-            updatedAt: firebaseUser.metadata.lastSignInDate ?? Date()
-        )
-    }
-    
-    // Firestore'dan document oluşturma
-    static func fromFirestore(_ document: DocumentSnapshot) -> User? {
-        guard let data = document.data() else { return nil }
-        
-        return User(
-            id: document.documentID,
-            phoneNumber: data["phoneNumber"] as? String ?? "",
-            firstName: data["firstName"] as? String,
-            lastName: data["lastName"] as? String,
-            email: data["email"] as? String,
-            role: UserRole(rawValue: data["role"] as? String ?? "user") ?? .user,
-            isVerified: data["isVerified"] as? Bool ?? false,
-            status: UserStatus(rawValue: data["status"] as? String ?? "active") ?? .active,
-            createdAt: (data["createdAt"] as? Timestamp)?.dateValue() ?? Date(),
-            updatedAt: (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
-        )
-    }
-    
-    // Firestore'a kaydetmek için
-    func toFirestore() -> [String: Any] {
-        return [
-            "phoneNumber": phoneNumber,
-            "firstName": firstName as Any,
-            "lastName": lastName as Any,
-            "email": email as Any,
-            "role": role.rawValue,
-            "isVerified": isVerified,
-            "status": status.rawValue,
-            "createdAt": createdAt,
-            "updatedAt": updatedAt
-        ]
     }
 }

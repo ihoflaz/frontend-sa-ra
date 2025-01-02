@@ -7,14 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5612EB1D2D24465E00515481 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5612EB1C2D24465E00515481 /* GoogleService-Info.plist */; };
-		5612EB232D24498F00515481 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB222D24498F00515481 /* FirebaseAnalytics */; };
-		5612EB252D24498F00515481 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB242D24498F00515481 /* FirebaseAuth */; };
-		5612EB272D24498F00515481 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB262D24498F00515481 /* FirebaseCore */; };
-		5612EB292D24498F00515481 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB282D24498F00515481 /* FirebaseCrashlytics */; };
-		5612EB2B2D24498F00515481 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB2A2D24498F00515481 /* FirebaseFirestore */; };
-		5612EB2D2D24498F00515481 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB2C2D24498F00515481 /* FirebaseMessaging */; };
-		5612EB2F2D24498F00515481 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB2E2D24498F00515481 /* FirebaseStorage */; };
 		567FA5972D244C8900D03B2F /* Testing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567FA5952D244C8800D03B2F /* Testing.framework */; platformFilter = ios; };
 		567FA5982D244C8900D03B2F /* Testing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 567FA5952D244C8800D03B2F /* Testing.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		567FA5992D244C8900D03B2F /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567FA5962D244C8800D03B2F /* XCTest.framework */; platformFilter = ios; };
@@ -71,7 +63,6 @@
 
 /* Begin PBXFileReference section */
 		5612EAAF2D24449200515481 /* frontend-sa-ra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "frontend-sa-ra.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5612EB1C2D24465E00515481 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5612EB342D244A9100515481 /* frontend-sa-raUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "frontend-sa-raUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5612EB432D244AB300515481 /* frontend-sa-raTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "frontend-sa-raTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		567FA5952D244C8800D03B2F /* Testing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Testing.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/Testing.framework; sourceTree = DEVELOPER_DIR; };
@@ -101,13 +92,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5612EB2D2D24498F00515481 /* FirebaseMessaging in Frameworks */,
-				5612EB232D24498F00515481 /* FirebaseAnalytics in Frameworks */,
-				5612EB292D24498F00515481 /* FirebaseCrashlytics in Frameworks */,
-				5612EB272D24498F00515481 /* FirebaseCore in Frameworks */,
-				5612EB2F2D24498F00515481 /* FirebaseStorage in Frameworks */,
-				5612EB2B2D24498F00515481 /* FirebaseFirestore in Frameworks */,
-				5612EB252D24498F00515481 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,7 +119,6 @@
 		5612EAA62D24449200515481 = {
 			isa = PBXGroup;
 			children = (
-				5612EB1C2D24465E00515481 /* GoogleService-Info.plist */,
 				5612EAB12D24449200515481 /* frontend-sa-ra */,
 				5612EB352D244A9100515481 /* frontend-sa-raUITests */,
 				5612EB442D244AB400515481 /* frontend-sa-raTests */,
@@ -295,7 +278,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5612EB1D2D24465E00515481 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

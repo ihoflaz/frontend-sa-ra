@@ -30,26 +30,39 @@ struct GroupDetailView: View {
                 }
                 
                 // Tarih bilgileri
-                if let startDate = group.startDate {
-                    HStack {
-                        Text("Başlangıç")
-                            .foregroundStyle(.gray)
-                        Spacer()
-                        Text(startDate.formatted(date: .numeric, time: .omitted))
-                    }
+                HStack {
+                    Text("Başlangıç")
+                        .foregroundStyle(.gray)
+                    Spacer()
+                    Text(group.startDate.formatted(date: .numeric, time: .omitted))
                 }
                 
-                if let endDate = group.endDate {
-                    HStack {
-                        Text("Bitiş")
-                            .foregroundStyle(.gray)
-                        Spacer()
-                        Text(endDate.formatted(date: .numeric, time: .omitted))
+                HStack {
+                    Text("Bitiş")
+                        .foregroundStyle(.gray)
+                    Spacer()
+                    Text(group.endDate.formatted(date: .numeric, time: .omitted))
+                }
+                
+                // Durum
+                HStack {
+                    Text("Durum")
+                        .foregroundStyle(.gray)
+                    Spacer()
+                    Text(group.isActive ? "Aktif" : "Pasif")
+                }
+            }
+            
+            // Katılımcılar bölümü
+            Section("Katılımcılar") {
+                ForEach(Array(group.participants.keys), id: \.self) { userId in
+                    if let userName = group.participants[userId] {
+                        Text(userName)
                     }
                 }
             }
             
-            // Mesajlaşma bölümü (şimdilik boş)
+            // Mesajlaşma bölümü
             Section("Mesajlar") {
                 Text("Mesajlaşma yakında eklenecek")
                     .foregroundStyle(.gray)
@@ -61,18 +74,21 @@ struct GroupDetailView: View {
 }
 
 // Önizleme için örnek veri
-#Preview {
-    NavigationView {
-        GroupDetailView(
-            group: Group(
-                id: "1",
-                name: "Roma Turu",
-                description: "7 günlük Roma turu",
-                guideId: "guide1",
-                startDate: Date(),
-                endDate: Date().addingTimeInterval(7*24*60*60),
-                isActive: true
+struct GroupDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            GroupDetailView(
+                group: Group(
+                    id: "1",
+                    name: "Roma Turu",
+                    description: "7 günlük Roma turu",
+                    guideId: "guide1",
+                    startDate: Date(),
+                    endDate: Date().addingTimeInterval(7*24*60*60),
+                    isActive: true,
+                    participants: ["user1": "Demo Kullanıcı"]
+                )
             )
-        )
+        }
     }
 }

@@ -1,118 +1,60 @@
-import FirebaseAuth
-import FirebaseFirestore
+import Foundation
 
 class AuthManager {
     static let shared = AuthManager()
-    private let auth = Auth.auth()
-    private let db = Firestore.firestore()
     
     private init() {}
     
-    // Telefon numarasına doğrulama kodu gönderme
-    func sendVerificationCode(to phoneNumber: String, completion: @escaping (Result<String, Error>) -> Void) {
-        PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { verificationID, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            if let verificationID = verificationID {
-                completion(.success(verificationID))
-            }
-        }
-    }
-    
-    // Doğrulama kodunu kontrol etme ve giriş yapma
-    func verifyCode(_ code: String, verificationID: String, completion: @escaping (Result<User, Error>) -> Void) {
-        let credential = PhoneAuthProvider.provider().credential(
-            withVerificationID: verificationID,
-            verificationCode: code
+    // Demo kullanıcılar
+    private let mockUsers: [String: User] = [
+        "5551234567": User(
+            id: "1",
+            phoneNumber: "5551234567",
+            firstName: "Demo",
+            lastName: "Kullanıcı",
+            email: "demo@example.com",
+            role: .user,
+            isVerified: true,
+            status: .active,
+            createdAt: Date(),
+            updatedAt: Date()
+        ),
+        "5559876543": User(
+            id: "2",
+            phoneNumber: "5559876543",
+            firstName: "Demo",
+            lastName: "Admin",
+            email: "admin@example.com",
+            role: .admin,
+            isVerified: true,
+            status: .active,
+            createdAt: Date(),
+            updatedAt: Date()
         )
-        
-        auth.signIn(with: credential) { [weak self] result, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            if let firebaseUser = result?.user {
-                // Kullanıcı modelini oluştur
-                let user = User.fromFirebaseUser(firebaseUser)
-                
-                // Firestore'a kaydet
-                self?.saveUserToFirestore(user, uid: firebaseUser.uid) { result in
-                    switch result {
-                    case .success(let savedUser):
-                        completion(.success(savedUser))
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                }
-            }
-        }
-    }
+    ]
     
-    // Kullanıcıyı Firestore'a kaydetme
-    private func saveUserToFirestore(_ user: User, uid: String, completion: @escaping (Result<User, Error>) -> Void) {
-        let userRef = db.collection("users").document(uid)
-        
-        userRef.getDocument { snapshot, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            if snapshot?.exists == true {
-                // Kullanıcı zaten var, güncelle
-                userRef.updateData([
-                    "updatedAt": Date()
-                ]) { error in
-                    if let error = error {
-                        completion(.failure(error))
-                    } else {
-                        completion(.success(user))
-                    }
-                }
+    // Giriş yapan kullanıcı
+    private var currentUser: User?
+    
+    // Kullanıcı girişi simülasyonu
+    func login(phoneNumber: String, completion: @escaping (Result<User, Error>) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            if let user = self?.mockUsers[phoneNumber] {
+                self?.currentUser = user
+                completion(.success(user))
             } else {
-                // Yeni kullanıcı oluştur
-                userRef.setData(user.toFirestore()) { error in
-                    if let error = error {
-                        completion(.failure(error))
-                    } else {
-                        completion(.success(user))
-                    }
-                }
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Geçersiz telefon numarası"])))
             }
         }
     }
     
     // Çıkış yapma
-    func signOut() throws {
-        try auth.signOut()
+    func signOut() {
+        currentUser = nil
     }
     
     // Mevcut kullanıcıyı alma
-    var currentUser: User? {
-        return auth.currentUser.map { User.fromFirebaseUser($0) }
-    }
-    
-    // Kullanıcıyı Firestore'dan okuma
-    private func getUserFromFirestore(uid: String, completion: @escaping (Result<User, Error>) -> Void) {
-        let userRef = db.collection("users").document(uid)
-        
-        userRef.getDocument { snapshot, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            guard let snapshot = snapshot,
-                  let user = User.fromFirestore(snapshot) else {
-                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User data could not be parsed"])))
-                return
-            }
-            
-            completion(.success(user))
-        }
+    var loggedInUser: User? {
+        return currentUser
     }
 }

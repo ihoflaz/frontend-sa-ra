@@ -9,22 +9,30 @@ import Foundation
 
 struct Group: Identifiable, Codable {
     let id: String
-    let name: String
-    let description: String?
-    let guideId: String
-    let startDate: Date?
-    let endDate: Date?
-    let isActive: Bool
+    var name: String
+    var description: String
+    var guideId: String
+    var startDate: Date
+    var endDate: Date
+    var isActive: Bool
+    var participants: [String: String] // [UserId: UserName]
     
-    // API'den gelen tarihler için özel CodingKeys
-    enum CodingKeys: String, CodingKey {
-        case id = "_id"
-        case name
-        case description
-        case guideId = "guide"
-        case startDate
-        case endDate
-        case isActive
+    init(id: String,
+         name: String,
+         description: String,
+         guideId: String,
+         startDate: Date,
+         endDate: Date,
+         isActive: Bool,
+         participants: [String: String] = [:]) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.guideId = guideId
+        self.startDate = startDate
+        self.endDate = endDate
+        self.isActive = isActive
+        self.participants = participants
     }
 }
 

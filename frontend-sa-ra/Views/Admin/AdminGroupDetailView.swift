@@ -7,166 +7,81 @@
 
 import SwiftUI
 
-// Mock yapılar
-struct MockMember: Identifiable {
-    let id: String
-    let name: String
-    let phone: String
-    let bluetoothEnabled: Bool
-}
-
 struct AdminGroupDetailView: View {
     let group: Group
-    
-    @State private var showingInviteSheet = false
-    @State private var showingBluetoothSheet = false
-    @State private var newMessage = ""
+    @StateObject private var groupViewModel = GroupViewModel()
+    @State private var showingEditSheet = false
+    @State private var editedName: String = ""
+    @State private var editedDescription: String = ""
+    @State private var editedStartDate: Date = Date()
+    @State private var editedEndDate: Date = Date()
     
     var body: some View {
         List {
-            // Grup Bilgileri
             Section("Grup Bilgileri") {
-                LabeledContent("Grup Adı", value: group.name)
-                if let description = group.description {
-                    LabeledContent("Açıklama", value: description)
-                }
-                if let startDate = group.startDate {
-                    LabeledContent("Başlangıç", value: startDate.formatted(date: .numeric, time: .omitted))
-                }
-                if let endDate = group.endDate {
-                    LabeledContent("Bitiş", value: endDate.formatted(date: .numeric, time: .omitted))
+                VStack(alignment: .leading) {
+                    Text("Grup Adı: \(group.name)")
+                    Text("Açıklama: \(group.description)")
+                    Text("Başlangıç: \(group.startDate.formatted())")
+                    Text("Bitiş: \(group.endDate.formatted())")
+                    Text("Durum: \(group.isActive ? "Aktif" : "Pasif")")
                 }
             }
             
-            // Üye Yönetimi
-            Section("Üyeler") {
-                Button(action: {
-                    showingInviteSheet = true
-                }) {
-                    Label("Üye Davet Et", systemImage: "person.badge.plus")
-                        .foregroundStyle(.blue)
-                }
-                
-                ForEach(getMembers()) { member in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(member.name)
-                            Text(member.phone)
-                                .font(.caption)
-                                .foregroundStyle(.gray)
-                        }
-                        
-                        Spacer()
-                        
-                        // Bluetooth durumu
-                        Image(systemName: member.bluetoothEnabled ? "wave.3.right.circle.fill" : "wave.3.right.circle")
-                            .foregroundStyle(member.bluetoothEnabled ? .blue : .gray)
+            Section("Katılımcılar") {
+                ForEach(Array(group.participants.keys), id: \.self) { userId in
+                    if let userName = group.participants[userId] {
+                        Text(userName)
                     }
                 }
             }
             
-            // Mesajlaşma
-            Section("Mesaj Gönder") {
-                TextField("Mesajınız...", text: $newMessage)
-                Button(action: sendMessage) {
-                    Text("Gönder")
-                        .frame(maxWidth: .infinity)
-                }
-                .disabled(newMessage.isEmpty)
-            }
-            
-            // Bluetooth Ayarları
             Section {
-                Button(action: {
-                    showingBluetoothSheet = true
-                }) {
-                    Label("Bluetooth Ayarları", systemImage: "wave.3.right.circle.fill")
+                Button("Grubu Düzenle") {
+                    editedName = group.name
+                    editedDescription = group.description
+                    editedStartDate = group.startDate
+                    editedEndDate = group.endDate
+                    showingEditSheet = true
                 }
             }
         }
-        .navigationTitle(group.name)
-        .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showingInviteSheet) {
-            InviteMembersView(group: group)
-        }
-        .sheet(isPresented: $showingBluetoothSheet) {
-            BluetoothSettingsView(group: group)
-        }
-    }
-    
-    private func sendMessage() {
-        // TODO: Implement message sending
-        newMessage = ""
-    }
-    
-    private func getMembers() -> [MockMember] {
-        return [
-            MockMember(id: "1", name: "Ahmet Yılmaz", phone: "+90 555 111 2233", bluetoothEnabled: true),
-            MockMember(id: "2", name: "Ayşe Demir", phone: "+90 555 444 5566", bluetoothEnabled: false),
-            MockMember(id: "3", name: "Mehmet Kaya", phone: "+90 555 777 8899", bluetoothEnabled: true)
-        ]
-    }
-}
-
-// Placeholder Views
-struct InviteMembersView: View {
-    let group: Group
-    @Environment(\.dismiss) var dismiss
-    
-    var body: some View {
-        NavigationView {
-            List {
-                // TODO: Implement invite UI
-                Text("Üye davet etme arayüzü")
-            }
-            .navigationTitle("Üye Davet Et")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Kapat") {
-                        dismiss()
+        .navigationTitle("Grup Detayı")
+        .sheet(isPresented: $showingEditSheet) {
+            NavigationView {
+                Form {
+                    TextField("Grup Adı", text: $editedName)
+                    TextField("Açıklama", text: $editedDescription)
+                    DatePicker("Başlangıç Tarihi", selection: $editedStartDate, displayedComponents: [.date])
+                    DatePicker("Bitiş Tarihi", selection: $editedEndDate, displayedComponents: [.date])
+                }
+                .navigationTitle("Grubu Düzenle")
+                .navigationBarItems(
+                    leading: Button("İptal") {
+                        showingEditSheet = false
+                    },
+                    trailing: Button("Kaydet") {
+                        // Demo kaydetme işlemi
+                        showingEditSheet = false
                     }
-                }
+                )
             }
         }
     }
 }
 
-struct BluetoothSettingsView: View {
-    let group: Group
-    @Environment(\.dismiss) var dismiss
-    
-    var body: some View {
-        NavigationView {
-            List {
-                // TODO: Implement Bluetooth settings UI
-                Text("Bluetooth ayarları arayüzü")
-            }
-            .navigationTitle("Bluetooth Ayarları")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Kapat") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
-
-#Preview {
-    NavigationView {
-        AdminGroupDetailView(
-            group: Group(
-                id: "1",
-                name: "Roma Turu",
-                description: "7 günlük Roma turu",
-                guideId: "guide1",
-                startDate: Date(),
-                endDate: Date().addingTimeInterval(7*24*60*60),
-                isActive: true
-            )
-        )
+// Preview Provider
+struct AdminGroupDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        AdminGroupDetailView(group: Group(
+            id: "1",
+            name: "Demo Grup",
+            description: "Demo açıklama",
+            guideId: "guide1",
+            startDate: Date(),
+            endDate: Date().addingTimeInterval(7*24*60*60),
+            isActive: true,
+            participants: ["user1": "Demo Kullanıcı"]
+        ))
     }
 }
