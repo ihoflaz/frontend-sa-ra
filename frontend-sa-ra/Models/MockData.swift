@@ -63,4 +63,20 @@ struct MockData {
             isActive: true
         )
     ]
+    
+    static var sharedMessages: [String: [Message]] = [:] // [GroupId: [Message]]
+    
+    static func addMessage(to groupId: String, message: Message) {
+        if sharedMessages[groupId] == nil {
+            sharedMessages[groupId] = []
+        }
+        sharedMessages[groupId]?.append(message)
+        NotificationCenter.default.post(name: .newMessageReceived, 
+                                      object: nil, 
+                                      userInfo: ["groupId": groupId, "message": message])
+    }
+    
+    static func getMessages(for groupId: String) -> [Message] {
+        return sharedMessages[groupId] ?? []
+    }
 }

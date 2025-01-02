@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33C7F6B92D26910E00E8F1FD /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB222D24498F00515481 /* FirebaseAnalytics */; };
+		33C7F6BA2D26910E00E8F1FD /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB242D24498F00515481 /* FirebaseAuth */; };
+		33C7F6BB2D26910E00E8F1FD /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB262D24498F00515481 /* FirebaseCore */; };
+		33C7F6BC2D26910E00E8F1FD /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB282D24498F00515481 /* FirebaseCrashlytics */; };
+		33C7F6BD2D26910E00E8F1FD /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB2A2D24498F00515481 /* FirebaseFirestore */; };
+		33C7F6BE2D26910E00E8F1FD /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB2C2D24498F00515481 /* FirebaseMessaging */; };
+		33C7F6BF2D26910E00E8F1FD /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 5612EB2E2D24498F00515481 /* FirebaseStorage */; };
 		567FA5972D244C8900D03B2F /* Testing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567FA5952D244C8800D03B2F /* Testing.framework */; platformFilter = ios; };
 		567FA5982D244C8900D03B2F /* Testing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 567FA5952D244C8800D03B2F /* Testing.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		567FA5992D244C8900D03B2F /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 567FA5962D244C8800D03B2F /* XCTest.framework */; platformFilter = ios; };
@@ -92,6 +99,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33C7F6BF2D26910E00E8F1FD /* FirebaseStorage in Frameworks */,
+				33C7F6BE2D26910E00E8F1FD /* FirebaseMessaging in Frameworks */,
+				33C7F6BD2D26910E00E8F1FD /* FirebaseFirestore in Frameworks */,
+				33C7F6BC2D26910E00E8F1FD /* FirebaseCrashlytics in Frameworks */,
+				33C7F6BB2D26910E00E8F1FD /* FirebaseCore in Frameworks */,
+				33C7F6BA2D26910E00E8F1FD /* FirebaseAuth in Frameworks */,
+				33C7F6B92D26910E00E8F1FD /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

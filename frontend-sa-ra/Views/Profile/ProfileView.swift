@@ -20,54 +20,59 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             List {
-                Section {
-                    // Profil fotoğrafı
-                    HStack {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 60, height: 60)
-                            .foregroundStyle(.blue)
-                        
-                        VStack(alignment: .leading) {
-                            Text(name)
-                                .font(.headline)
-                            Text(phone)
-                                .font(.subheadline)
-                                .foregroundStyle(.gray)
+                // Profil Bilgileri
+                Section("Profil") {
+                    NavigationLink(destination: PersonalInfoView()) {
+                        HStack {
+                            Image(systemName: "person.circle")
+                                .foregroundStyle(.blue)
+                            Text("Kişisel Bilgiler")
                         }
                     }
-                    .padding(.vertical, 8)
                 }
                 
-                Section("Kişisel Bilgiler") {
-                    LabeledContent("Ad Soyad", value: name)
-                    LabeledContent("Telefon", value: phone)
-                    LabeledContent("E-posta", value: email)
-                }
-                
-                Section("Uygulama") {
-                    NavigationLink(destination: Text("Bluetooth Ayarları")) {
-                        Label("Bluetooth Ayarları", systemImage: "wave.3.right.circle.fill")
-                    }
-                    
-                    NavigationLink(destination: Text("Bildirim Ayarları")) {
-                        Label("Bildirimler", systemImage: "bell.fill")
-                    }
-                    
-                    NavigationLink(destination: Text("Gizlilik Ayarları")) {
-                        Label("Gizlilik", systemImage: "lock.fill")
+                // Bluetooth Ayarları
+                Section("Bağlantı") {
+                    NavigationLink(destination: BluetoothSettingsView()) {
+                        HStack {
+                            Image(systemName: "bluetooth")
+                                .foregroundStyle(.blue)
+                            Text("Bluetooth Ayarları")
+                        }
                     }
                 }
                 
+                // Bildirimler
+                Section("Bildirimler") {
+                    NavigationLink(destination: NotificationPreferencesView()) {
+                        HStack {
+                            Image(systemName: "bell")
+                                .foregroundStyle(.blue)
+                            Text("Bildirim Ayarları")
+                        }
+                    }
+                }
+                
+                // Güvenlik
+                Section("Güvenlik") {
+                    NavigationLink(destination: EmergencyContactsView()) {
+                        HStack {
+                            Image(systemName: "shield")
+                                .foregroundStyle(.blue)
+                            Text("Acil Durum Kişileri")
+                        }
+                    }
+                }
+                
+                // Çıkış Yap
                 Section {
                     Button(action: {
                         appViewModel.logout()
                     }) {
                         HStack {
-                            Text("Çıkış Yap")
-                                .foregroundStyle(.red)
-                            Spacer()
                             Image(systemName: "rectangle.portrait.and.arrow.right")
+                                .foregroundStyle(.red)
+                            Text("Çıkış Yap")
                                 .foregroundStyle(.red)
                         }
                     }
@@ -133,6 +138,23 @@ struct EditProfileView: View {
             tempPhone = phone
             tempEmail = email
         }
+    }
+}
+
+struct PersonalInfoView: View {
+    @State private var name = "Ahmet Yılmaz"
+    @State private var email = "ahmet@example.com"
+    @State private var phone = "+90 555 123 45 67"
+    
+    var body: some View {
+        List {
+            Section("Kişisel Bilgiler") {
+                TextField("Ad Soyad", text: $name)
+                TextField("E-posta", text: $email)
+                TextField("Telefon", text: $phone)
+            }
+        }
+        .navigationTitle("Kişisel Bilgiler")
     }
 }
 

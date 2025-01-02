@@ -220,11 +220,18 @@ struct ChatRowView: View {
 struct ChatDetailView: View {
     let chat: MockChat
     @State private var newMessage = ""
+    @State private var messages: [Message]
     @Environment(\.dismiss) private var dismiss
+    
+    init(chat: MockChat) {
+        self.chat = chat
+        // Mevcut mesajları yükle
+        _messages = State(initialValue: MockData.getMessages(for: chat.id))
+    }
     
     var body: some View {
         VStack {
-            List(chat.messages) { message in
+            List(messages) { message in
                 MessageBubbleView(message: message)
             }
             
@@ -242,10 +249,26 @@ struct ChatDetailView: View {
         }
         .navigationTitle(chat.groupName)
         .navigationBarTitleDisplayMode(.inline)
+        .onReceive(NotificationCenter.default.publisher(for: .newMessageReceived)) { notification in
+            if let groupId = notification.userInfo?["groupId"] as? String,
+               groupId == chat.id,
+               let message = notification.userInfo?["message"] as? Message {
+                messages.append(message)
+            }
+        }
     }
     
     private func sendMessage() {
-        // TODO: Implement sending message
+        let message = Message(
+            content: newMessage,
+            senderName: "Admin",
+            isFromAdmin: true
+        )
+        
+        // Mesajı paylaşılan mock verilere ekle
+        MockData.addMessage(to: chat.id, message: message)
+        
+        // TextField'ı temizle
         newMessage = ""
     }
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct GroupDetailView: View {
     let group: Group
+    @State private var messages: [Message] = []
+    @State private var newMessage = ""
     
     var body: some View {
         List {
@@ -64,12 +66,49 @@ struct GroupDetailView: View {
             
             // Mesajlaşma bölümü
             Section("Mesajlar") {
-                Text("Mesajlaşma yakında eklenecek")
-                    .foregroundStyle(.gray)
+                ForEach(messages) { message in
+                    MessageBubbleView(message: message)
+                }
+                
+                HStack {
+                    TextField("Mesajınız...", text: $newMessage)
+                        .textFieldStyle(.roundedBorder)
+                    
+                    Button(action: sendMessage) {
+                        Image(systemName: "paperplane.fill")
+                            .foregroundStyle(.blue)
+                    }
+                    .disabled(newMessage.isEmpty)
+                }
+                .padding(.vertical, 8)
+            }
+        }
+        .onAppear {
+            // Mevcut mesajları yükle
+            messages = MockData.getMessages(for: group.id)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .newMessageReceived)) { notification in
+            if let groupId = notification.userInfo?["groupId"] as? String,
+               groupId == group.id,
+               let message = notification.userInfo?["message"] as? Message {
+                messages.append(message)
             }
         }
         .navigationTitle(group.name)
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private func sendMessage() {
+        let message = Message(
+            content: newMessage,
+            senderName: "Kullanıcı"
+        )
+        
+        // Mesajı paylaşılan mock verilere ekle
+        MockData.addMessage(to: group.id, message: message)
+        
+        // TextField'ı temizle
+        newMessage = ""
     }
 }
 
